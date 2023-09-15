@@ -5,7 +5,7 @@ using XLua;
 using System;
 using XLuaTest;
 
-
+// 标记这个类可以被Lua调用
 [LuaCallCSharp]
 public class PlayerLuaScript : MonoBehaviour
 {
@@ -74,6 +74,7 @@ end";
 
         //scriptEnv.Set()
 
+        // 引入Unity相关的API
         string init_api = @"
 UnityEngine = CS.UnityEngine
 Vector3 = UnityEngine.Vector3
@@ -122,7 +123,7 @@ KeyCode = UnityEngine.KeyCode
         }
     }
 
-
+    // 在FixedUpdate方法中执行Lua脚本的FixedUpdate方法，并进行垃圾回收
     private void FixedUpdate()
     {
         if (luaFUpdate != null)
