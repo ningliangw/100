@@ -8,7 +8,7 @@ public class ScriptManager : MonoBehaviour
     [SerializeField]
     private GameObject player;
 
-    private GameObject player_instance;
+    public GameObject player_instance;
 
     private void Awake()
     {
@@ -32,10 +32,15 @@ public class ScriptManager : MonoBehaviour
         player_instance = p;
     }
 
-    public void ResetPlayer()   //÷ÿ÷√ÕÊº“
+    public void CreatePlayer()
     {
-        GameObject.Destroy(player_instance, 0f);
+        if (player) DestroyPlayer();
         player_instance = GameObject.Instantiate(player);
         player_instance.transform.position = LevelManager.Instance.startPoint.position;
+    }
+
+    public void DestroyPlayer()
+    {
+        GameObject.Destroy(player_instance, 0f);
     }
 }

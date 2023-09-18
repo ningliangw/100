@@ -97,7 +97,6 @@ public class LevelManager : MonoBehaviour
         {
             select_dirty = false;                                               // 重置选择状态
             calSelectedCenter();                                                // 计算选择物体的中心点
-            now_grid_pos = GetGridPos(select_center + mouse_delta, grid_space); // 计算当前网格位置
         }
 
         if (Input.GetMouseButton(0))                                            // 鼠标左键一直按下时
@@ -118,13 +117,6 @@ public class LevelManager : MonoBehaviour
             }
 
             select_center += mouse_delta;                                       // 更新选择物体的中心点位置
-            if (Grid)                                                           // 编辑时网格对齐
-            {
-                Vector3 v1 = GetGridPos(select_center, grid_space);             // 计算网格对齐后的位置
-                mouse_delta = v1 - now_grid_pos;                                // 更新移动增量向量
-                now_grid_pos = v1;                                              // 更新当前网格位置
-            }
-           
 
             foreach (TileBase t in selected)
             {
@@ -141,24 +133,8 @@ public class LevelManager : MonoBehaviour
         m_last = m_world;
     }
 
-    Vector3 now_grid_pos = Vector3.zero;
     Vector3 select_center = Vector3.zero;
 
-    Vector3 GetGridPos(Vector3 pos, float g)                        // 获取网格对齐后的位置
-    {
-        Vector3 v1 = pos;
-        Vector3 v2 = new Vector3(v1.x % g, v1.y % g, 0);
-        v1 -= v2;
-        if (Mathf.Abs(v2.x) > g * 0.5f)
-        {
-            v1.x += Mathf.Sign(v2.x) * g;
-        }
-        if (Mathf.Abs(v2.y) > g * 0.5f)
-        {
-            v1.y += Mathf.Sign(v2.y) * g;
-        }
-        return v1;
-    }
 
     void calSelectedCenter()                                        // 计算选择物体的中心点位置
     {
@@ -218,10 +194,21 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    bool Grid = false;                                              //是否显示网格
-    public void EnbaleGrid(bool e)                                  //设置网格可不可见
+    bool start = false;
+
+    public bool IsPlaying { get { return start; } }
+    public void Start_End()
     {
-        Grid = e;
+        start = !start;
+        if (start)
+        {
+            ScriptManager.Instance.CreatePlayer();
+        }
+        else
+        {
+            ScriptManager.Instance.DestroyPlayer();
+            CameraContorller.Instance.LerpCam2Zero();
+        }
     }
 
 }
