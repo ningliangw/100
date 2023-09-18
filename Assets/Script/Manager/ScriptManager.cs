@@ -32,7 +32,7 @@ public class ScriptManager : MonoBehaviour
         player_instance = p;
     }
 
-    public void ResetPlayer()
+    public void ResetPlayer()   //÷ÿ÷√ÕÊº“
     {
         GameObject.Destroy(player_instance, 0f);
         player_instance = GameObject.Instantiate(player);
