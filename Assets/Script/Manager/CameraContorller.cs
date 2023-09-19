@@ -5,27 +5,96 @@ using UnityEngine.EventSystems;
 
 public class CameraContorller : MonoBehaviour
 {
+    public static CameraContorller Instance;
     [SerializeField]
-    private Camera view_cam;
+    private Camera view_cam;        //相机对象
+    [SerializeField]
+    private float cam_lerp_rate = 0.2f;
 
-    public float s = 0.001f;
+    public float s = 0.001f;        // 鼠标移动速度的缩放因子
+
+    [SerializeField]
+    private GameObject tile_list;
+
+    private float target_orthographicSize = 5f;
+
+    Vector3 _local_pos_tl;
+    Vector3 _local_scale_tl;
 
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+
     void Start()
     {
+        _local_pos_tl = tile_list.transform.localPosition;
+        _local_scale_tl = tile_list.transform.localScale;
+    }
+
+    Vector3 last = Vector3.zero;    // 上一帧鼠标位置
+    float mouseSpeed = 10;          // 鼠标移动速度
+
+
+    Vector3 pos_tmp = new Vector3(1, 1, 0);
+    void Update()
+    {
+        // 使用滚轮控制相机的缩放
+       
+
+        if (LevelManager.Instance.IsPlaying) // play模式
+        {
+
+        }
+        else                                 // 编辑模式
+        {
+            
+            target_orthographicSize = Mathf.Clamp(target_orthographicSize - Input.mouseScrollDelta.y * 0.5f, 3, 7);
+            view_cam.orthographicSize = Mathf.Lerp(view_cam.orthographicSize, target_orthographicSize, 0.12f);
+            DragCamera();
+        }
+
+        HandleUI();
+    }
+
+    IEnumerator _LerpCam2Zero()
+    {
+        for(int i = 0; i < 100; ++i)
+        {
+            pos_tmp = Vector3.Lerp(view_cam.transform.position, Vector3.zero, cam_lerp_rate * 2);
+            pos_tmp.z = -10;
+            view_cam.transform.position = pos_tmp;
+            yield return new WaitForFixedUpdate();
+        }
         
     }
 
-    Vector3 last = Vector3.zero;
-    float mouseSpeed = 10;
-    // Update is called once per frame
-    void Update()
+    public void LerpCam2Zero()
     {
-        view_cam.orthographicSize = Mathf.Clamp(view_cam.orthographicSize + Input.mouseScrollDelta.y, 3, 7);
+        StartCoroutine(_LerpCam2Zero());
+    }
 
-        if(Input.GetMouseButtonDown(1)) last = Input.mousePosition;
+    private void FixedUpdate()
+    {
+        if (LevelManager.Instance.IsPlaying) // play模式
+        {
+            view_cam.orthographicSize = Mathf.Lerp(view_cam.orthographicSize, 4.3f, cam_lerp_rate*2);
+            if (ScriptManager.Instance.player_instance)
+            {
+                pos_tmp = Vector3.Lerp(view_cam.transform.position, ScriptManager.Instance.player_instance.transform.position, cam_lerp_rate);
+                pos_tmp.z = -10;
+                view_cam.transform.position = pos_tmp;
+            }
+        }
+    }
 
+    void DragCamera()
+    {
+        if (Input.GetMouseButtonDown(1)) last = Input.mousePosition;
+
+        // 当按住鼠标右键时，根据鼠标移动的距离来移动相机位置
         if (Input.GetMouseButton(1))
         {
             Vector3 deltaMousePosition = Input.mousePosition - last;
@@ -35,6 +104,18 @@ public class CameraContorller : MonoBehaviour
             view_cam.transform.position += deltaMousePosition;
         }
 
-        last = Input.mousePosition;
+        last = Input.mousePosition; // 更新鼠标位置
     }
+
+    float _s = 1;
+    void HandleUI() //缩放时处理UI
+    {
+        _s = (1 + (view_cam.orthographicSize - 5)/5f);
+
+        tile_list.transform.localPosition = _local_pos_tl * _s;
+        tile_list.transform.localScale = _local_scale_tl * _s;
+    }
+
+
+
 }
