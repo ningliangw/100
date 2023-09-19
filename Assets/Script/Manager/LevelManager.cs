@@ -17,6 +17,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private GameObject tool_move;           // 移动工具
 
+    [SerializeField]
     private OptMode mode = OptMode.Select;  // 当前操作模式
     Vector3 m_last;                         // 上一帧鼠标的世界坐标
 
@@ -199,6 +200,7 @@ public class LevelManager : MonoBehaviour
     public bool IsPlaying { get { return start; } }
     public void Start_End()
     {
+        UIManager.Instance.CloseGrid();
         start = !start;
         if (start)
         {
@@ -209,6 +211,36 @@ public class LevelManager : MonoBehaviour
             ScriptManager.Instance.DestroyPlayer();
             CameraContorller.Instance.LerpCam2Zero();
         }
+        
     }
+
+    public void SetSelectMode()
+    {
+        mode = OptMode.Select;
+    }
+
+    public void SetPutMode()
+    {
+        mode = OptMode.Put;
+    }
+
+    public Vector3 GetGridPosition()
+    {
+        // 返回地图的位置信息
+        return new Vector3(0, 0, 0); // 假设地图的位置为(0, 0, 0)
+    }
+
+    public Vector2Int GetGridSize()
+    {
+        // 返回地图的大小信息
+        return new Vector2Int(15, 10); // 假设地图的大小为15x10
+    }
+
+    public float GetGridCellSize()
+    {
+        // 返回网格单元的大小
+        return 1f; // 假设每个网格单元的大小为1
+    }
+
 
 }
