@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static UIManager;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : MonoBehaviour, IModuleSelection
 {
+    public GameObject currentSelectedModule; // 存储当前选中的模块
+
     public static LevelManager Instance;
     public Transform startPoint;            // 起点位置
     public Transform endPoint;              // 终点位置
@@ -34,14 +38,14 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
     enum Dir        // 方向枚举
     {
         None, XY, X, Y
     }
 
-    Dir m_dir = Dir.None;
+     Dir m_dir = Dir.None;
     // Update is called once per frame
     void Update()
     {
@@ -58,6 +62,7 @@ public class LevelManager : MonoBehaviour
                 {
                     case "right":
                         m_dir = Dir.X;
+                        
                         break;
                     case "up":
                         m_dir = Dir.Y;
@@ -65,7 +70,7 @@ public class LevelManager : MonoBehaviour
                     case "center":
                         m_dir = Dir.XY;
                         break;
-                    default: 
+                    default:
                         break;
                 }
             }
@@ -124,7 +129,7 @@ public class LevelManager : MonoBehaviour
                 t.transform.position = t.transform.position + mouse_delta;
             }
 
-            
+
         }
 
 
@@ -201,6 +206,7 @@ public class LevelManager : MonoBehaviour
     public void Start_End()
     {
         UIManager.Instance.CloseGrid();
+        UIManager.Instance.panel.SetActive(false);
         start = !start;
         if (start)
         {
@@ -211,7 +217,7 @@ public class LevelManager : MonoBehaviour
             ScriptManager.Instance.DestroyPlayer();
             CameraContorller.Instance.LerpCam2Zero();
         }
-        
+
     }
 
     public void SetSelectMode()
@@ -242,5 +248,9 @@ public class LevelManager : MonoBehaviour
         return 1f; // 假设每个网格单元的大小为1
     }
 
+    public GameObject GetCurrentSelectedModule()
+    {
+        return currentSelectedModule;
+    }
 
 }
