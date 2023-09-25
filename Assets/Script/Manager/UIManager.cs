@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     public Button Obstacle3;
     public static GameObject selectedModule;
 
+
     public GameObject panel;        //选择地图块面板
     public LevelManager levelManager;
 
@@ -37,9 +38,10 @@ public class UIManager : MonoBehaviour
         Select.onClick.AddListener(OnSelectClick);
         Put.onClick.AddListener(OnPutClick);
         Back.onClick.AddListener(OnBackClick);
-        Obstacle1.onClick.AddListener(OnObstacle1Click);
-        Obstacle2.onClick.AddListener(OnObstacle2Click);
-        Obstacle3.onClick.AddListener(OnObstacle3Click);
+        // 为每个按钮添加OnClick事件
+        Obstacle1.onClick.AddListener(() => OnObstacleClick(Obstacle1.gameObject));
+        Obstacle2.onClick.AddListener(() => OnObstacleClick(Obstacle2.gameObject));
+        Obstacle3.onClick.AddListener(() => OnObstacleClick(Obstacle3.gameObject));
 
 
         lineRenderer = GetComponent<LineRenderer>();
@@ -108,6 +110,8 @@ public class UIManager : MonoBehaviour
          OnBackClick();
          OnSelectClick();
         //Put.interactable = false;
+
+        
     }
 
     private void OnBackClick()
@@ -123,22 +127,14 @@ public class UIManager : MonoBehaviour
 
         Select.interactable = true;
     }
-    private void OnObstacle1Click()
+
+    private void OnObstacleClick(GameObject obstacle)
     {
         Put.interactable = true;
         // 设置当前选中的模块
-        selectedModule = Obstacle1.gameObject;
-         levelManager.currentSelectedModule= selectedModule;
-    }
+        selectedModule = obstacle;
+        levelManager.currentSelectedModule = selectedModule;
 
-    private void OnObstacle2Click()
-    {
-        Put.interactable = true;
-    }
-
-    private void OnObstacle3Click()
-    {
-        Put.interactable = true;
     }
 
     public void CloseGrid()
