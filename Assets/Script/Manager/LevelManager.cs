@@ -101,7 +101,7 @@ public class LevelManager : MonoBehaviour, IModuleSelection
                 }
             }
 
-            if (mode == OptMode.Put)//∑≈÷√tile
+            if (mode == OptMode.Put)// ∑≈÷√tile
             {
                 print("put");
                 float _x = m_world.x % grid_space;
