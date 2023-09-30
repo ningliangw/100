@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,8 +15,10 @@ public class LevelManager : MonoBehaviour, IModuleSelection
     public Transform startPoint;            // 起点位置
     public Transform endPoint;              // 终点位置
 
-    public GameObject[] registries;         // 注册的玩家
+    public TileBase[] registries;         // 地块注册表
     public List<TileBase> tiles;            // 瓦片
+
+
 
     float grid_space = 1f;                  // 网格间距
 
@@ -24,6 +28,7 @@ public class LevelManager : MonoBehaviour, IModuleSelection
     [SerializeField]
     private OptMode mode = OptMode.Select;  // 当前操作模式
     Vector3 m_last;                         // 上一帧鼠标的世界坐标
+
 
     enum OptMode    // 操作模式的枚举
     {
@@ -45,6 +50,9 @@ public class LevelManager : MonoBehaviour, IModuleSelection
         None, XY, X, Y
     }
 
+
+
+    Vector3 drug_start_pos = Vector3.zero;
      Dir m_dir = Dir.None;
     // Update is called once per frame
     void Update()
@@ -58,11 +66,11 @@ public class LevelManager : MonoBehaviour, IModuleSelection
 
             if (cast_tool.collider)                                             // 如果点击了编辑器工具
             {
+                drug_start_pos = m_world;
                 switch (cast_tool.collider.name)
                 {
                     case "right":
                         m_dir = Dir.X;
-                        
                         break;
                     case "up":
                         m_dir = Dir.Y;
@@ -77,7 +85,7 @@ public class LevelManager : MonoBehaviour, IModuleSelection
             else                                                                // 如果没有
             {
                 m_dir = Dir.None;
-                //检测是否点击到了关卡
+                //检测是否点击到了关卡物体
                 RaycastHit2D cast_level = Physics2D.Raycast(m_world, Vector2.zero, 0f, LayerMask.GetMask("Level"));
 
                 switch (mode)
@@ -92,7 +100,49 @@ public class LevelManager : MonoBehaviour, IModuleSelection
                         break;
                 }
             }
-        }
+
+            if (mode == OptMode.Put)//放置tile
+            {
+                print("put");
+                float _x = m_world.x % grid_space;
+                float _y = m_world.y % grid_space;
+                float hs = grid_space / 2;
+
+                if (_x > 0)
+                {
+                    if (_x > hs) _x = mouse_delta.x + 1 - _x;
+                    else _x = mouse_delta.x - _x;
+                }
+                else
+                {
+                    if (_x < -hs) _x = mouse_delta.x + 1 - _x;
+                    else _x = mouse_delta.x - _x;
+                }
+
+                
+                if (_y > 0)
+                {
+                    if (_y > hs) _y = mouse_delta.y + 1 - _y;
+                    else _y = mouse_delta.y - _y;
+                }
+                else
+                {
+                    if (_y < -hs) _y = mouse_delta.y + 1 - _y;
+                    else _y = mouse_delta.y - _y;
+                }
+
+                GameObject obj = GetCurrentSelectedModule();
+                TileBase t = obj.GetComponent<TileBase>();
+                if(t)
+                {
+                    print("put2");
+                    obj = GameObject.Instantiate(obj);
+                    t = obj.GetComponent<TileBase>();
+                    tiles.Add(t);
+                }
+            }
+
+            }
         if (Input.GetMouseButtonUp(0))
         {
             m_dir = Dir.None;
@@ -105,8 +155,29 @@ public class LevelManager : MonoBehaviour, IModuleSelection
             calSelectedCenter();                                                // 计算选择物体的中心点
         }
 
+
+        
+
         if (Input.GetMouseButton(0))                                            // 鼠标左键一直按下时
         {
+            mouse_delta = m_world - drug_start_pos;
+
+            float _x = mouse_delta.x % grid_space;
+            float _y = mouse_delta.y % grid_space;
+            float hs = grid_space / 2;
+
+            if (_x > 0)
+            {
+                if (_x > hs) mouse_delta.x += 1 - _x;
+                else mouse_delta.x -= _x;
+            }
+            else
+            {
+                if (_x < -hs) mouse_delta.x += 1 - _x;
+                else mouse_delta.x -= _x;
+            }
+
+
             switch (m_dir)
             {
                 case Dir.X:
@@ -122,6 +193,8 @@ public class LevelManager : MonoBehaviour, IModuleSelection
                     break;
             }
 
+
+            
             select_center += mouse_delta;                                       // 更新选择物体的中心点位置
 
             foreach (TileBase t in selected)
@@ -140,6 +213,7 @@ public class LevelManager : MonoBehaviour, IModuleSelection
     }
 
     Vector3 select_center = Vector3.zero;
+
 
 
     void calSelectedCenter()                                        // 计算选择物体的中心点位置
@@ -220,6 +294,8 @@ public class LevelManager : MonoBehaviour, IModuleSelection
 
     }
 
+
+
     public void SetSelectMode()
     {
         mode = OptMode.Select;
@@ -228,6 +304,11 @@ public class LevelManager : MonoBehaviour, IModuleSelection
     public void SetPutMode()
     {
         mode = OptMode.Put;
+    }
+
+    public void PutObject()
+    {
+
     }
 
     public Vector3 GetGridPosition()

@@ -13,13 +13,13 @@ public class CameraContorller : MonoBehaviour
 
     public float s = 0.001f;        // 鼠标移动速度的缩放因子
 
-    [SerializeField]
-    private GameObject tile_list;
+    //[SerializeField]
+    //private GameObject tile_list;
 
     private float target_orthographicSize = 5f;
 
-    Vector3 _local_pos_tl;
-    Vector3 _local_scale_tl;
+    //Vector3 _local_pos_tl;
+    //Vector3 _local_scale_tl;
 
 
     private void Awake()
@@ -30,8 +30,8 @@ public class CameraContorller : MonoBehaviour
 
     void Start()
     {
-        _local_pos_tl = tile_list.transform.localPosition;
-        _local_scale_tl = tile_list.transform.localScale;
+        //_local_pos_tl = tile_list.transform.localPosition;
+        //_local_scale_tl = tile_list.transform.localScale;
     }
 
     Vector3 last = Vector3.zero;    // 上一帧鼠标位置
@@ -56,7 +56,7 @@ public class CameraContorller : MonoBehaviour
             DragCamera();
         }
 
-        HandleUI();
+        //HandleUI();
     }
 
     IEnumerator _LerpCam2Zero()
@@ -112,8 +112,8 @@ public class CameraContorller : MonoBehaviour
     {
         _s = (1 + (view_cam.orthographicSize - 5)/5f);
 
-        tile_list.transform.localPosition = _local_pos_tl * _s;
-        tile_list.transform.localScale = _local_scale_tl * _s;
+        //tile_list.transform.localPosition = _local_pos_tl * _s;
+        //tile_list.transform.localScale = _local_scale_tl * _s;
     }
 
 

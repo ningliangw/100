@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TileBase : MonoBehaviour
 {
     public string tileName;        // 地图块的名称
-    public int tileType;           // 地图块的类型
 
     private bool isHighlighted;    // 地图块是否被高亮显示
+
+    public Sprite imgOnGui;        //放到地图UI里面
+
 
     void Start()
     {

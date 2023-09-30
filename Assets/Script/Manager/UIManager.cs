@@ -134,7 +134,6 @@ public class UIManager : MonoBehaviour
         // 设置当前选中的模块
         selectedModule = obstacle;
         levelManager.currentSelectedModule = selectedModule;
-
     }
 
     public void CloseGrid()
