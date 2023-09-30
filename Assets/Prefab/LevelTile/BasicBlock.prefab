@@ -160,8 +160,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.3207547, g: 0.3207547, b: 0.3207547, a: 1}
+  m_Sprite: {fileID: 2021935202, guid: 5fe5454ec8605de43809133b020d1b69, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -209,4 +209,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dd56bfcf637b1b47960114f5abd184e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileName: Test1
+  imgOnGui: {fileID: -1306090582, guid: 5fe5454ec8605de43809133b020d1b69, type: 3}
   highlight: {fileID: 1226083187888713861}

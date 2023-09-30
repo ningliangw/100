@@ -21,7 +21,7 @@ public class TileOnGUI : MonoBehaviour
 
     public TileBase GetTile()
     {
-        if (registryId >= LevelManager.Instance.registries.Length && registryId == -1)
+        if (registryId < LevelManager.Instance.registries.Length && registryId != -1)
             return LevelManager.Instance.registries[registryId];
         return null;
     }

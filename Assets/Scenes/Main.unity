@@ -981,7 +981,6 @@ GameObject:
   - component: {fileID: 292151368}
   - component: {fileID: 292151367}
   - component: {fileID: 292151369}
-  - component: {fileID: 292151370}
   - component: {fileID: 292151371}
   - component: {fileID: 292151372}
   m_Layer: 0
@@ -1034,26 +1033,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 3578505836650009049, guid: e6aee219d59bf2c48942ce627788e221, type: 3}
   player_instance: {fileID: 0}
---- !u!114 &292151370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 292151366}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc8c4a61c20e22046be53df1c6c42e09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentSelectedModule: {fileID: 0}
-  startPoint: {fileID: 1655414043}
-  endPoint: {fileID: 0}
-  registries:
-  - {fileID: 2686124132017562386, guid: 1f698a30248887c4cbeaaf3c4f41d161, type: 3}
-  tiles: []
-  tool_move: {fileID: 302355757}
-  mode: 0
 --- !u!114 &292151371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1661,10 +1640,8 @@ MonoBehaviour:
   startPoint: {fileID: 1655414043}
   endPoint: {fileID: 400995359}
   registries:
-  - {fileID: 1381288445}
-  - {fileID: 1863165719}
-  tiles:
-  - {fileID: 1381288445}
+  - {fileID: 6989407418317192613, guid: 1f698a30248887c4cbeaaf3c4f41d161, type: 3}
+  tiles: []
   tool_move: {fileID: 302355757}
   mode: 0
 --- !u!1 &634177947
@@ -2290,7 +2267,6 @@ GameObject:
   - component: {fileID: 1091674037}
   - component: {fileID: 1091674036}
   - component: {fileID: 1091674035}
-  - component: {fileID: 1091674038}
   m_Layer: 5
   m_Name: Select
   m_TagString: Untagged
@@ -2401,21 +2377,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1091674033}
   m_CullTransparentMesh: 1
---- !u!114 &1091674038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1091674033}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a590e5550e150904f961016b9f3d2c2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileName: 
-  imgOnGui: {fileID: 0}
-  attachedGameObject: {fileID: 0}
 --- !u!1 &1103414631
 GameObject:
   m_ObjectHideFlags: 0
@@ -3400,7 +3361,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileName: abc
   imgOnGui: {fileID: 0}
-  attachedGameObject: {fileID: 0}
 --- !u!1 &1441033930
 GameObject:
   m_ObjectHideFlags: 0
@@ -3522,7 +3482,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 292151370}
+      - m_Target: {fileID: 613597755}
         m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
         m_MethodName: Start_End
         m_Mode: 1
@@ -3660,8 +3620,7 @@ MonoBehaviour:
   Put: {fileID: 1867690897}
   Back: {fileID: 1818757118}
   Obstacle1: {fileID: 2054155791}
-  Obstacle2: {fileID: 0}
-  Obstacle3: {fileID: 0}
+  selectedModule: {fileID: 0}
   panel: {fileID: 2048621645}
   levelManager: {fileID: 613597755}
   lineRenderer: {fileID: 1523010724}
@@ -3778,7 +3737,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollViewContent: {fileID: 1918970863}
   tileButtonPrefab: {fileID: 2054155789}
-  cnt: 0
   levelManager: {fileID: 613597755}
 --- !u!1 &1655414042
 GameObject:
@@ -4074,7 +4032,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileName: cdf
   imgOnGui: {fileID: 0}
-  attachedGameObject: {fileID: 0}
 --- !u!212 &1863165720
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4139,7 +4096,6 @@ GameObject:
   - component: {fileID: 1867690899}
   - component: {fileID: 1867690898}
   - component: {fileID: 1867690897}
-  - component: {fileID: 1867690900}
   m_Layer: 5
   m_Name: Put
   m_TagString: Untagged
@@ -4250,21 +4206,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1867690895}
   m_CullTransparentMesh: 1
---- !u!114 &1867690900
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1867690895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a590e5550e150904f961016b9f3d2c2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileName: 
-  imgOnGui: {fileID: 0}
-  attachedGameObject: {fileID: 0}
 --- !u!1 &1905201561
 GameObject:
   m_ObjectHideFlags: 0
@@ -4980,7 +4921,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 934a89e4ab812d94cbba82f67d238986, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  registryId: -1
 --- !u!1 &2076147716
 GameObject:
   m_ObjectHideFlags: 0

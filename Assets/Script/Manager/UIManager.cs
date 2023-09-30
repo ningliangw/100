@@ -13,9 +13,9 @@ public class UIManager : MonoBehaviour
     public Button Put;
     public Button Back;
     public Button Obstacle1;
-    public Button Obstacle2;
-    public Button Obstacle3;
-    public static GameObject selectedModule;
+    //public Button Obstacle2;
+    //public Button Obstacle3;
+    public TileBase selectedModule;
 
 
     public GameObject panel;        //选择地图块面板
@@ -39,9 +39,9 @@ public class UIManager : MonoBehaviour
         Put.onClick.AddListener(OnPutClick);
         Back.onClick.AddListener(OnBackClick);
         // 为每个按钮添加OnClick事件
-        Obstacle1.onClick.AddListener(() => OnObstacleClick(Obstacle1.gameObject));
-        Obstacle2.onClick.AddListener(() => OnObstacleClick(Obstacle2.gameObject));
-        Obstacle3.onClick.AddListener(() => OnObstacleClick(Obstacle3.gameObject));
+        //Obstacle1.onClick.AddListener(() => OnObstacleClick(Obstacle1.gameObject));
+        //Obstacle2.onClick.AddListener(() => OnObstacleClick(Obstacle2.gameObject));
+        //Obstacle3.onClick.AddListener(() => OnObstacleClick(Obstacle3.gameObject));
 
 
         lineRenderer = GetComponent<LineRenderer>();
@@ -81,20 +81,18 @@ public class UIManager : MonoBehaviour
         levelManager.SetSelectMode();
 
         // 设置按钮为激活状态
-        Obstacle1.gameObject.SetActive(true);
-        Obstacle2.gameObject.SetActive(true);
-        Obstacle3.gameObject.SetActive(true);
+        //Obstacle1.gameObject.SetActive(true);
+        //Obstacle2.gameObject.SetActive(true);
+        //Obstacle3.gameObject.SetActive(true);
         Back.gameObject.SetActive(true);
 
         // Interactable 属性设置为 false
         Put.interactable = false;
 
         Select.interactable = false;
-
-        
     }
 
-    private void OnPutClick()
+    public void OnPutClick()
     {
         levelManager.SetPutMode();
         showGrid = true;
@@ -108,18 +106,16 @@ public class UIManager : MonoBehaviour
         }
          ClosePanel();
          OnBackClick();
-         OnSelectClick();
+        //OnSelectClick();
         //Put.interactable = false;
-
-        
     }
 
     private void OnBackClick()
     {
 
         Obstacle1.gameObject.SetActive(false);
-        Obstacle2.gameObject.SetActive(false);
-        Obstacle3.gameObject.SetActive(false);
+        //Obstacle2.gameObject.SetActive(false);
+        //Obstacle3.gameObject.SetActive(false);
         Back.gameObject.SetActive(false);
 
 
@@ -128,13 +124,16 @@ public class UIManager : MonoBehaviour
         Select.interactable = true;
     }
 
-    private void OnObstacleClick(GameObject obstacle)
+    public void OnObstacleClick(TileBase obstacle)
     {
-        Put.interactable = true;
+        //Put.interactable = true;
         // 设置当前选中的模块
         selectedModule = obstacle;
-        levelManager.currentSelectedModule = selectedModule;
+        //levelManager.currentSelectedModule = selectedModule;
     }
+
+    
+
 
     public void CloseGrid()
     {
@@ -142,8 +141,9 @@ public class UIManager : MonoBehaviour
         lineRenderer.positionCount = 0;
     }
 
-    private void DrawGrid()
+    public void DrawGrid()
     {
+        if (lineRenderer.positionCount > 0) return; // 避免重复绘制
         // 获取网格的大小和位置信息
         Vector3 gridPosition = levelManager.GetGridPosition();
         Vector2Int gridSize = levelManager.GetGridSize();
