@@ -66,14 +66,19 @@ public class CameraContorller : MonoBehaviour
             pos_tmp = Vector3.Lerp(view_cam.transform.position, Vector3.zero, cam_lerp_rate * 2);
             pos_tmp.z = -10;
             view_cam.transform.position = pos_tmp;
-            if ((view_cam.transform.position - Vector3.zero).magnitude <= 0.2f) break;
+            if (((Vector2)pos_tmp).magnitude <= 0.2f) break;
             yield return new WaitForFixedUpdate();
         }
         yield return null;
     }
-
+    Coroutine lerp2zero = null;
     public void LerpCam2Zero()
     {
+        if(lerp2zero != null)
+        {
+            StopCoroutine(lerp2zero);
+            lerp2zero = null;
+        }
         StartCoroutine(_LerpCam2Zero());
     }
 
