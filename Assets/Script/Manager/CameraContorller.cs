@@ -13,13 +13,13 @@ public class CameraContorller : MonoBehaviour
 
     public float s = 0.001f;        // 鼠标移动速度的缩放因子
 
-    [SerializeField]
-    private GameObject tile_list;
+    //[SerializeField]
+    //private GameObject tile_list;
 
     private float target_orthographicSize = 5f;
 
-    Vector3 _local_pos_tl;
-    Vector3 _local_scale_tl;
+    //Vector3 _local_pos_tl;
+    //Vector3 _local_scale_tl;
 
 
     private void Awake()
@@ -30,8 +30,8 @@ public class CameraContorller : MonoBehaviour
 
     void Start()
     {
-        _local_pos_tl = tile_list.transform.localPosition;
-        _local_scale_tl = tile_list.transform.localScale;
+        //_local_pos_tl = tile_list.transform.localPosition;
+        //_local_scale_tl = tile_list.transform.localScale;
     }
 
     Vector3 last = Vector3.zero;    // 上一帧鼠标位置
@@ -56,23 +56,29 @@ public class CameraContorller : MonoBehaviour
             DragCamera();
         }
 
-        HandleUI();
+        //HandleUI();
     }
 
     IEnumerator _LerpCam2Zero()
     {
-        for(int i = 0; i < 100; ++i)
+        while(true)
         {
             pos_tmp = Vector3.Lerp(view_cam.transform.position, Vector3.zero, cam_lerp_rate * 2);
             pos_tmp.z = -10;
             view_cam.transform.position = pos_tmp;
+            if (((Vector2)pos_tmp).magnitude <= 0.2f) break;
             yield return new WaitForFixedUpdate();
         }
-        
+        yield return null;
     }
-
+    Coroutine lerp2zero = null;
     public void LerpCam2Zero()
     {
+        if(lerp2zero != null)
+        {
+            StopCoroutine(lerp2zero);
+            lerp2zero = null;
+        }
         StartCoroutine(_LerpCam2Zero());
     }
 
@@ -112,8 +118,8 @@ public class CameraContorller : MonoBehaviour
     {
         _s = (1 + (view_cam.orthographicSize - 5)/5f);
 
-        tile_list.transform.localPosition = _local_pos_tl * _s;
-        tile_list.transform.localScale = _local_scale_tl * _s;
+        //tile_list.transform.localPosition = _local_pos_tl * _s;
+        //tile_list.transform.localScale = _local_scale_tl * _s;
     }
 
 

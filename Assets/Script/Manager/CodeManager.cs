@@ -25,7 +25,7 @@ public class CodeManager : MonoBehaviour
         
     }
 
-    public static string GetLuaString(string filename)  //获取Lua脚本文件
+    public static string GetString(string filename)  //获取Lua文本
     {
         string s = "";
         try
