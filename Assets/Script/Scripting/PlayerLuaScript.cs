@@ -86,8 +86,8 @@ KeyCode = UnityEngine.KeyCode
         ";
 
         luaEnv.DoString(init_api, "init_api", scriptEnv);
-        //luaEnv.DoString(CodeManager.GetLuaString("PlayerScript\\player.lua"), "player_control", scriptEnv);
-        luaEnv.DoString(luaDefault, "player_control", scriptEnv);
+        luaEnv.DoString(CodeManager.GetString("PlayerScript\\player.lua"), "player_control", scriptEnv);
+        //luaEnv.DoString(luaDefault, "player_control", scriptEnv);
         Action luaAwake = scriptEnv.Get<Action>("Awake");
         scriptEnv.Get("Start", out luaStart);
         scriptEnv.Get("Update", out luaUpdate);

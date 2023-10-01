@@ -9,10 +9,10 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance;
 
     public Button TilemapEditor;
-    public Button Select;
-    public Button Put;
-    public Button Back;
-    public Button Obstacle1;
+    //public Button Select;
+    //public Button Put;
+    //public Button Back;
+    //public Button Obstacle1;
     //public Button Obstacle2;
     //public Button Obstacle3;
     public TileBase selectedModule;
@@ -21,7 +21,19 @@ public class UIManager : MonoBehaviour
     public GameObject panel;        //选择地图块面板
     public LevelManager levelManager;
 
+    [SerializeField]
+    private Image start_end_button;
+    [SerializeField]
+    private Sprite start_sprite;
+    [SerializeField]
+    private Sprite end_sprite;
+
     private bool showGrid = false;
+
+    [SerializeField]
+    private Image imgShow;
+    [SerializeField]
+    private Text name_discript;
 
     [SerializeField]
     private LineRenderer lineRenderer;
@@ -31,13 +43,19 @@ public class UIManager : MonoBehaviour
         Instance = this;
     }
 
+    public void SetStartButtonIcon(bool start)
+    {
+         start_end_button.sprite = !start ? start_sprite : end_sprite;
+    }
+
+
     private void Start()
     {
         levelManager = LevelManager.Instance;
         TilemapEditor.onClick.AddListener(OnTilemapEditorClick);
-        Select.onClick.AddListener(OnSelectClick);
-        Put.onClick.AddListener(OnPutClick);
-        Back.onClick.AddListener(OnBackClick);
+        //Select.onClick.AddListener(OnSelectClick);
+        //Put.onClick.AddListener(OnPutClick);
+        //Back.onClick.AddListener(OnBackClick);
         // 为每个按钮添加OnClick事件
         //Obstacle1.onClick.AddListener(() => OnObstacleClick(Obstacle1.gameObject));
         //Obstacle2.onClick.AddListener(() => OnObstacleClick(Obstacle2.gameObject));
@@ -53,10 +71,19 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if (showGrid)
+        if(LevelManager.Instance.CurrMode == LevelManager.OptMode.Put && selectedModule != null)
         {
-            DrawGrid();
+            imgShow.sprite = selectedModule.imgOnGui;
+            imgShow.color = Color.white;
+            name_discript.text = selectedModule.tileName;
         }
+        else
+        {
+            imgShow.sprite = null;
+            imgShow.color = new Color(0.5f, 0.5f, 0.5f, 0.4f);
+            name_discript.text = "None";
+        }
+
 
     }
     public interface IModuleSelection
@@ -65,7 +92,7 @@ public class UIManager : MonoBehaviour
     }
 
 
-    private void OnTilemapEditorClick()
+    public void OnTilemapEditorClick()
     {
         panel.SetActive(true);
 
@@ -84,12 +111,12 @@ public class UIManager : MonoBehaviour
         //Obstacle1.gameObject.SetActive(true);
         //Obstacle2.gameObject.SetActive(true);
         //Obstacle3.gameObject.SetActive(true);
-        Back.gameObject.SetActive(true);
+        //Back.gameObject.SetActive(true);
 
         // Interactable 属性设置为 false
-        Put.interactable = false;
+        //Put.interactable = false;
 
-        Select.interactable = false;
+        //Select.interactable = false;
     }
 
     public void OnPutClick()
@@ -113,21 +140,33 @@ public class UIManager : MonoBehaviour
     private void OnBackClick()
     {
 
-        Obstacle1.gameObject.SetActive(false);
+        //Obstacle1.gameObject.SetActive(false);
         //Obstacle2.gameObject.SetActive(false);
         //Obstacle3.gameObject.SetActive(false);
-        Back.gameObject.SetActive(false);
+        //Back.gameObject.SetActive(false);
 
 
-        Put.interactable = true;
+        //Put.interactable = true;
 
-        Select.interactable = true;
+        //Select.interactable = true;
     }
 
     public void OnObstacleClick(TileBase obstacle)
     {
         //Put.interactable = true;
         // 设置当前选中的模块
+
+        levelManager.SetPutMode();
+        showGrid = true;
+        if (showGrid)
+        {
+            DrawGrid();
+        }
+        else
+        {
+            lineRenderer.positionCount = 0;
+        }
+
         selectedModule = obstacle;
         //levelManager.currentSelectedModule = selectedModule;
     }

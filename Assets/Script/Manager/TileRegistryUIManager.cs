@@ -33,7 +33,10 @@ public class TileRegistryUIManager : MonoBehaviour
 
             // 手动挪位置，不过这样似乎在滚轮方面有问题
             RectTransform buttonRectTransform = tileButton.GetComponent<RectTransform>();
-            buttonRectTransform.anchoredPosition = new Vector2(buttonRectTransform.anchoredPosition.x, 80 - currentButtonY);
+            buttonRectTransform.anchoredPosition = new Vector2(50 + 140 * i, -50);
+            
+
+            //buttonRectTransform.anchoredPosition = new Vector2(buttonRectTransform.anchoredPosition.x, 80 - currentButtonY);
 
             // 获取按钮上的Text组件，改名
             TextMeshProUGUI buttonText = tileButton.GetComponentInChildren<TextMeshProUGUI>();
@@ -58,7 +61,7 @@ public class TileRegistryUIManager : MonoBehaviour
                 {
                     button.onClick.AddListener(() =>
                     {
-                        UIManager.Instance.OnPutClick();
+                        //UIManager.Instance.OnPutClick();
                         UIManager.Instance.OnObstacleClick(tileOnGUIComponent.GetTile());
                     });
                 }
@@ -66,8 +69,6 @@ public class TileRegistryUIManager : MonoBehaviour
 
             // 按钮间的间隔
             currentButtonY += buttonRectTransform.rect.height + 35f;
-
-
 
         }
         tileButtonPrefab.SetActive(false);

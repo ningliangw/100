@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +20,14 @@ public class LevelManager : MonoBehaviour, IModuleSelection
     public TileBase[] registries;         // 地块注册表
     public List<TileBase> tiles;            // 瓦片
 
+    public int GetIdInRegistry(string name)
+    {
+        for(int i = 0; i < registries.Length; i++)
+        {
+            if (registries[i].tileName == name) return i;
+        }
+        return -1;
+    }
 
 
     float grid_space = 1f;                  // 网格间距
@@ -25,14 +35,16 @@ public class LevelManager : MonoBehaviour, IModuleSelection
     [SerializeField]
     private GameObject tool_move;           // 移动工具
 
+
     [SerializeField]
     private OptMode mode = OptMode.Select;  // 当前操作模式
+    public OptMode CurrMode { get { return mode; } }
     Vector3 m_last;                         // 上一帧鼠标的世界坐标
 
 
-    enum OptMode    // 操作模式的枚举
+    public enum OptMode    // 操作模式的枚举
     {
-        Select, Put, None
+        Select, Put, Start
     }
 
     private void Awake()
@@ -88,7 +100,7 @@ public class LevelManager : MonoBehaviour, IModuleSelection
             {
                 m_dir = Dir.None;
                 //检测是否点击到了关卡物体
-                if(mode != OptMode.None)
+                if(mode != OptMode.Start)
                 {
                     RaycastHit2D cast_level = Physics2D.Raycast(m_world, Vector2.zero, 0f, LayerMask.GetMask("Level"));
                     SelectObject(cast_level);
@@ -112,7 +124,8 @@ public class LevelManager : MonoBehaviour, IModuleSelection
                 }
             }
 
-            }
+        }
+
         if (Input.GetMouseButtonUp(0))
         {
             m_dir = Dir.None;
@@ -167,10 +180,19 @@ public class LevelManager : MonoBehaviour, IModuleSelection
         {
             foreach (TileBase t in selected)
             {
+                tiles.Remove(t);
                 GameObject.Destroy(t.gameObject);
             }
             selected.Clear();
+
+            
+
             select_dirty = true;
+        }
+
+        if (!start && Input.GetKeyDown(KeyCode.Escape))
+        {
+            mode = OptMode.Select;
         }
 
         tool_move.SetActive(selected.Count > 0);                                //激活移动工具
@@ -251,18 +273,26 @@ public class LevelManager : MonoBehaviour, IModuleSelection
     public bool IsPlaying { get { return start; } }
     public void Start_End()
     {
-        UIManager.Instance.CloseGrid();
         UIManager.Instance.panel.SetActive(false);
         start = !start;
+        UIManager.Instance.SetStartButtonIcon(start);
         if (start)
         {
             ScriptManager.Instance.CreatePlayer();
-            mode = OptMode.None;
+
+            UIManager.Instance.CloseGrid();
+            UIManager.Instance.ClosePanel();
+
+            mode = OptMode.Start;
         }
         else
         {
             ScriptManager.Instance.DestroyPlayer();
             CameraContorller.Instance.LerpCam2Zero();
+
+            UIManager.Instance.DrawGrid();
+            UIManager.Instance.OnTilemapEditorClick();
+
             mode = OptMode.Select;
         }
 
@@ -278,11 +308,6 @@ public class LevelManager : MonoBehaviour, IModuleSelection
     public void SetPutMode()
     {
         mode = OptMode.Put;
-    }
-
-    public void PutObject()
-    {
-
     }
 
     public Vector3 GetGridPosition()
@@ -308,4 +333,78 @@ public class LevelManager : MonoBehaviour, IModuleSelection
         return currentSelectedModule;
     }
 
+    
+    private JObject Tile2Json(TileBase tile)
+    {
+        JObject obj = new JObject();
+
+        Vector3 pos = tile.transform.position;
+        obj.Add("x", pos.x);
+        obj.Add("y", pos.y);
+        //obj.Add("z", pos.z);
+
+        obj.Add("id", GetIdInRegistry(tile.tileName));
+
+        return obj;
+    }
+
+    public string SerializeLevel()
+    {
+        JArray tiles = new JArray();
+
+        foreach(TileBase t in this.tiles)
+        {
+            tiles.Add(Tile2Json(t));
+        }
+
+        return tiles.ToString();
+    }
+
+
+    private void Json2Tile(JObject obj)
+    {
+        //JObject obj = new JObject(str);
+
+        Vector3 pos = new Vector3((float)obj.GetValue("x"), (float)obj.GetValue("y"), 0);
+
+
+        int id = (int)obj.GetValue("id");
+
+
+        if(id < 0 || id >= registries.Length)
+        {
+            throw new Exception("Unknown Tile: "+id);
+        }
+        else
+        {
+            TileBase tile = registries[id];  // 源
+            tile = Instantiate(tile);
+            tile.transform.position = pos;
+            tiles.Add(tile);
+        }
+    }
+
+
+    public void ClearMap()
+    {
+        foreach(TileBase t in tiles)
+        {
+            Destroy(t.gameObject, 0f);
+        }
+        tiles.Clear();
+    }
+
+
+    public void UnserializeLevel(string str)
+    {
+        ClearMap();
+        JArray ts = (JArray)JsonConvert.DeserializeObject(str);
+
+        
+
+        for (int i = 0; i < ts.Count; i++)
+        {
+            Json2Tile((JObject)ts[i]);
+        }
+    }
 }

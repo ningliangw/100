@@ -61,14 +61,15 @@ public class CameraContorller : MonoBehaviour
 
     IEnumerator _LerpCam2Zero()
     {
-        for(int i = 0; i < 100; ++i)
+        while(true)
         {
             pos_tmp = Vector3.Lerp(view_cam.transform.position, Vector3.zero, cam_lerp_rate * 2);
             pos_tmp.z = -10;
             view_cam.transform.position = pos_tmp;
+            if ((view_cam.transform.position - Vector3.zero).magnitude <= 0.2f) break;
             yield return new WaitForFixedUpdate();
         }
-        
+        yield return null;
     }
 
     public void LerpCam2Zero()
