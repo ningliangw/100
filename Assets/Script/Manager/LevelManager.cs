@@ -203,7 +203,7 @@ public class LevelManager : MonoBehaviour, IModuleSelection
 
     Vector3 select_center = Vector3.zero;
 
-    private bool CheckInRange(Vector3 pos)
+    public bool CheckInRange(Vector3 pos)
     {
         return Mathf.Abs(pos.x) <= 7 && pos.y >= -1.5f && pos.y <= 4.5f;
     }
@@ -310,6 +310,10 @@ public class LevelManager : MonoBehaviour, IModuleSelection
         mode = OptMode.Put;
     }
 
+    public OptMode GetMode()
+    {
+        return mode;
+    }
     public Vector3 GetGridPosition()
     {
         // 返回地图的位置信息

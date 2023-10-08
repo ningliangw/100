@@ -10,6 +10,7 @@ public class TileRegistryUIManager : MonoBehaviour
     public GameObject scrollViewContent; // Scroll View包裹的范围
     public GameObject tileButtonPrefab;  // 按钮
 
+
     private TileBase[] registries; // 地块注册表
 
     public static TileRegistryUIManager Instance;
