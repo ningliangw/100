@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class TileBase : MonoBehaviour
 {
     public string tileName;        // 地图块的名称
+    public string detail;
 
     private bool isHighlighted;    // 地图块是否被高亮显示
 
@@ -38,5 +39,15 @@ public class TileBase : MonoBehaviour
             // 恢复正常的颜色、材质等等
             GetComponent<Renderer>().material.color = Color.white;
         }
+    }
+
+    public virtual void OnStart()
+    {
+
+    }
+
+    public virtual void OnEnd(bool sucess)
+    {
+
     }
 }

@@ -6,6 +6,7 @@ public class BaseBlock : TileBase
 {
     [SerializeField]
     private GameObject highlight;
+
     // Start is called before the first frame update
     void Start()
     {

@@ -40,6 +40,7 @@ public class SavesManager : MonoBehaviour
 
         writeStr(path.ToString() + "\\code.lua", code);
         writeStr(path.ToString() + "\\map.json", LevelManager.Instance.SerializeLevel());
+        MsgBox.Instance.PushMsg("已保存", 1.5f);
     }
 
     private void Load()
@@ -52,6 +53,11 @@ public class SavesManager : MonoBehaviour
             string code = getStr(path.ToString() + "\\code.lua");
             writeStr(Application.dataPath + "\\PlayerScript\\player.lua", code);
             LevelManager.Instance.UnserializeLevel(getStr(path.ToString() + "\\map.json"));
+            MsgBox.Instance.PushMsg("加载存档", 1.5f);
+        }
+        else
+        {
+            MsgBox.Instance.PushMsg("存档不存在", 1.5f);
         }
     }
 

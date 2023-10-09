@@ -6,7 +6,6 @@ public class TileControl : MonoBehaviour
     public float changeTime = 1f;
     public float disappearTime = 2f; 
     public float appearTime = 0.5f;
-    public LevelManager levelManager;
     public int test = 0;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D target;
@@ -31,10 +30,16 @@ public class TileControl : MonoBehaviour
 
     private void Update()
     {
-        if (haveBegin == false&&levelManager.IsPlaying)
+        if (!haveBegin && LevelManager.Instance.IsPlaying)
         {
             haveBegin = true;
+            StopAllCoroutines();
             StartCoroutine(FadeIn(fadeTargetColor));
+        }
+        else if(haveBegin && !LevelManager.Instance.IsPlaying)
+        {
+            haveBegin = false;
+            StopAllCoroutines();
         }
         Check();
     }
@@ -68,8 +73,6 @@ public class TileControl : MonoBehaviour
             targetColor = fadeTargetColor;
             target.enabled = true;
             yield return new WaitForSeconds(appearTime);
-
-
         }
 
         StartCoroutine(FadeIn(targetColor));
@@ -80,7 +83,7 @@ public class TileControl : MonoBehaviour
         Collider2D collision = Physics2D.OverlapBox(transform.position, target.size, 0f, LayerMask.GetMask("Player"));
         if (collision != null)
         {
-            
+            LevelManager.Instance.End(false);
         }
     }
 }

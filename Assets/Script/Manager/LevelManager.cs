@@ -273,7 +273,7 @@ public class LevelManager : MonoBehaviour, IModuleSelection
     public bool IsPlaying { get { return start; } }
     public void Start_End()
     {
-        UIManager.Instance.panel.SetActive(false);
+        //UIManager.Instance.panel.SetActive(false);
         start = !start;
         UIManager.Instance.SetStartButtonIcon(start);
         if (start)
@@ -296,9 +296,33 @@ public class LevelManager : MonoBehaviour, IModuleSelection
             mode = OptMode.Select;
         }
 
+        foreach(TileBase t in tiles)
+        {
+            if (start) t.OnStart();
+            else t.OnEnd(false);
+        }
     }
 
+    public void End(bool sucess)
+    {
+        if (!start) return;
+        start = false;
+        UIManager.Instance.SetStartButtonIcon(false);
 
+        ScriptManager.Instance.DestroyPlayer();
+        CameraContorller.Instance.LerpCam2Zero();
+
+        UIManager.Instance.DrawGrid();
+        UIManager.Instance.OnTilemapEditorClick();
+
+        mode = OptMode.Select;
+
+        MsgBox.Instance.PushMsg(sucess ? "Í¨¹Ø":"Ê§°Ü", 0.7f);
+        foreach (TileBase t in tiles)
+        {
+            t.OnEnd(sucess);
+        }
+    }
 
     public void SetSelectMode()
     {

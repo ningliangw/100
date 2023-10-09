@@ -209,6 +209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dd56bfcf637b1b47960114f5abd184e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileName: Test1
-  imgOnGui: {fileID: -1306090582, guid: 5fe5454ec8605de43809133b020d1b69, type: 3}
+  tileName: "\u57FA\u7840\u65B9\u5757"
+  detail: "\u7528\u4E8E\u8E2E\u811A"
+  imgOnGui: {fileID: 2021935202, guid: 5fe5454ec8605de43809133b020d1b69, type: 3}
   highlight: {fileID: 1226083187888713861}
