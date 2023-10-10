@@ -10,6 +10,7 @@ public class TileRegistryUIManager : MonoBehaviour
     public GameObject scrollViewContent; // Scroll View包裹的范围
     public GameObject tileButtonPrefab;  // 按钮
 
+
     private TileBase[] registries; // 地块注册表
 
     public static TileRegistryUIManager Instance;
@@ -33,13 +34,13 @@ public class TileRegistryUIManager : MonoBehaviour
 
             // 手动挪位置，不过这样似乎在滚轮方面有问题
             RectTransform buttonRectTransform = tileButton.GetComponent<RectTransform>();
-            buttonRectTransform.anchoredPosition = new Vector2(50 + 140 * i, -50);
-            
+            buttonRectTransform.localPosition = new Vector3(80 + 140 * i, 0, 0);
+
 
             //buttonRectTransform.anchoredPosition = new Vector2(buttonRectTransform.anchoredPosition.x, 80 - currentButtonY);
 
             // 获取按钮上的Text组件，改名
-            TextMeshProUGUI buttonText = tileButton.GetComponentInChildren<TextMeshProUGUI>();
+            Text buttonText = tileButton.GetComponentInChildren<Text>();
             if (buttonText != null)
             {
                 buttonText.text = registries[i].tileName;

@@ -9,11 +9,12 @@ using XLuaTest;
 [LuaCallCSharp]
 public class PlayerLuaScript : MonoBehaviour
 {
-    [SerializeField]
-    private Rigidbody2D rigidbody;
+    [SerializeField] Rigidbody2D rigidbody;
+    [SerializeField] Collider2D ground_checker;
+
     internal static LuaEnv luaEnv = new LuaEnv(); //all lua behaviour shared one luaenv only!
     internal static float lastGCTime = 0;
-    internal const float GCInterval = 1;//1 second 
+    internal const float GCInterval = 1;//1 second
 
     private Action luaStart;
     private Action luaUpdate;
@@ -22,6 +23,8 @@ public class PlayerLuaScript : MonoBehaviour
 
     private LuaTable scriptEnv;
     private Action luaOnHitGround;
+
+
 
     public static string luaDefault = @"onGrund = false
 
@@ -62,6 +65,11 @@ end";
 
     void Awake()
     {
+        filter.useLayerMask = true;
+        filter.SetLayerMask(LayerMask.GetMask("Level"));
+
+
+
         scriptEnv = luaEnv.NewTable();
 
         // 为每个脚本设置一个独立的环境，可一定程度上防止脚本间全局变量、函数冲突
@@ -93,7 +101,7 @@ KeyCode = UnityEngine.KeyCode
         scriptEnv.Get("Update", out luaUpdate);
         scriptEnv.Get("FixedUpdate", out luaFUpdate);
         scriptEnv.Get("OnDestroy", out luaOnDestroy);
-        scriptEnv.Get("OnHitGround", out luaOnHitGround);
+        //scriptEnv.Get("OnHitGround", out luaOnHitGround);
 
         if (luaAwake != null)
         {
@@ -172,6 +180,12 @@ KeyCode = UnityEngine.KeyCode
         return rigidbody.velocity;
     }
 
+    public bool IsOnGround()
+    {
+        int count = ground_checker.Cast(Vector2.down, filter, rch2ds, 0f);
+        return count > 0;
+    }
+
     void HandleInput()
     {
         Input.GetKeyDown(KeyCode.Space);
@@ -185,14 +199,6 @@ KeyCode = UnityEngine.KeyCode
         return input;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Level"))
-        {
-            if (luaOnHitGround != null)
-            {
-                luaOnHitGround();
-            }
-        }
-    }
+    RaycastHit2D[] rch2ds = new RaycastHit2D[6];
+    ContactFilter2D filter = new ContactFilter2D();
 }
